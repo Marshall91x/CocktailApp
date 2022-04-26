@@ -3,17 +3,14 @@ package it.edelmonte.cocktailapp.fragment;
 import static org.koin.java.KoinJavaComponent.inject;
 
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavHost;
-import androidx.navigation.Navigation;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,14 +19,12 @@ import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.functions.Function;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import it.edelmonte.cocktailapp.R;
-import it.edelmonte.cocktailapp.api.CocktailApiInterface;
 import it.edelmonte.cocktailapp.api.CocktailApiClient;
-import it.edelmonte.cocktailapp.model.Drink;
-import it.edelmonte.cocktailapp.model.DrinkList;
+import it.edelmonte.cocktailapp.api.CocktailApiInterface;
+import it.edelmonte.cocktailapp.model.CocktailList;
 import it.edelmonte.cocktailapp.util.CloudManager;
 import kotlin.Lazy;
 
@@ -50,7 +45,7 @@ public class LoadDataFragment extends Fragment{
         CocktailApiInterface apiService = CocktailApiClient.getClient().create(CocktailApiInterface.class);
 
         //Create a requests list for concurrency calls
-        List<Observable<DrinkList>> requests = new ArrayList<>();
+        List<Observable<CocktailList>> requests = new ArrayList<>();
         requests.add(apiService.getCategories());
         requests.add(apiService.getAlcoholic());
         requests.add(apiService.getIngredients());
@@ -60,10 +55,10 @@ public class LoadDataFragment extends Fragment{
             @Override
             public Object apply(Object[] objects) throws Throwable {
                 // Filling filters lists with api responses and saving in singleton
-                cloudManager.getValue().setCategories(((DrinkList) objects[0]).getDrinks());
-                cloudManager.getValue().setAlcoholic(((DrinkList) objects[1]).getDrinks());
-                cloudManager.getValue().setIngredients(((DrinkList) objects[2]).getDrinks());
-                cloudManager.getValue().setGlasses(((DrinkList) objects[3]).getDrinks());
+                cloudManager.getValue().setCategories(((CocktailList) objects[0]).getCocktails());
+                cloudManager.getValue().setAlcoholic(((CocktailList) objects[1]).getCocktails());
+                cloudManager.getValue().setIngredients(((CocktailList) objects[2]).getCocktails());
+                cloudManager.getValue().setGlasses(((CocktailList) objects[3]).getCocktails());
                 return objects;
             }
         }).subscribeOn(Schedulers.io()).subscribe(new Observer<Object>() {

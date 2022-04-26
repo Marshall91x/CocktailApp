@@ -1,20 +1,22 @@
 package it.edelmonte.cocktailapp.api;
 
 import io.reactivex.rxjava3.core.Observable;
-import it.edelmonte.cocktailapp.model.DrinkList;
+import it.edelmonte.cocktailapp.model.CocktailList;
+import retrofit2.Call;
 import retrofit2.http.GET;
 
 public interface CocktailApiInterface {
 
     @GET("list.php?c=list")
-    Observable<DrinkList> getCategories();
+    Observable<CocktailList> getCategories();
 
     @GET("list.php?g=list")
-    Observable<DrinkList> getGlasses();
+    Observable<CocktailList> getGlasses();
 
     @GET("list.php?a=list")
-    Observable<DrinkList> getAlcoholic();
+    Observable<CocktailList> getAlcoholic();
 
     @GET("list.php?i=list")
-    Observable<DrinkList> getIngredients();
+    Observable<CocktailList> getIngredients();
+
 }

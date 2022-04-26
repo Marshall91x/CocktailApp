@@ -2,44 +2,44 @@ package it.edelmonte.cocktailapp.util;
 
 import java.util.List;
 
-import it.edelmonte.cocktailapp.model.Drink;
+import it.edelmonte.cocktailapp.model.Cocktail;
 
 public class CloudManager {
 
-    private List<Drink> categories;
-    private List<Drink> ingredients;
-    private List<Drink> glasses;
-    private List<Drink> alcoholic;
+    private List<Cocktail> categories;
+    private List<Cocktail> ingredients;
+    private List<Cocktail> glasses;
+    private List<Cocktail> alcoholic;
 
-    public List<Drink> getCategories() {
+    public List<Cocktail> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<Drink> categories) {
+    public void setCategories(List<Cocktail> categories) {
         this.categories = categories;
     }
 
-    public List<Drink> getIngredients() {
+    public List<Cocktail> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(List<Drink> ingredients) {
+    public void setIngredients(List<Cocktail> ingredients) {
         this.ingredients = ingredients;
     }
 
-    public List<Drink> getGlasses() {
+    public List<Cocktail> getGlasses() {
         return glasses;
     }
 
-    public void setGlasses(List<Drink> glasses) {
+    public void setGlasses(List<Cocktail> glasses) {
         this.glasses = glasses;
     }
 
-    public List<Drink> getAlcoholic() {
+    public List<Cocktail> getAlcoholic() {
         return alcoholic;
     }
 
-    public void setAlcoholic(List<Drink> alcoholic) {
+    public void setAlcoholic(List<Cocktail> alcoholic) {
         this.alcoholic = alcoholic;
     }
 }
