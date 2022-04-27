@@ -27,6 +27,7 @@ public class CocktailRepository {
     }
 
     public MutableLiveData<CocktailList> getCocktails(String s) {
+        //Calling api with "dynamic" endpoint creation to use only one api method
         Call<CocktailList> call = apiService.getCocktails("filter.php?"+s);
         call.enqueue(new Callback<CocktailList>() {
             @Override

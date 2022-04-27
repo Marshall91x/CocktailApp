@@ -15,19 +15,20 @@
         <ImageView
             android:id="@+id/cocktail_image"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:adjustViewBounds="true"/>
 
         <TextView
             android:id="@+id/cocktail_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="32dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/dark_grey"
             android:gravity="center"
-            android:layout_below="@id/cocktail_image"
-            android:textColor="@color/design_default_color_primary_dark"
-            android:textSize="16sp"
-            android:textStyle="bold"/>
+            android:padding="5dp"
+            android:textColor="@color/white"
+            android:textSize="16sp"/>
 
     </RelativeLayout>
 

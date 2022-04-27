@@ -6,8 +6,8 @@
     tools:context=".fragment.LoadDataFragment">
 
     <ImageView
+        android:id="@+id/gif"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/giphy"/>
+        android:layout_height="match_parent"/>
 
 </FrameLayout>

@@ -1,16 +1,23 @@
 package it.edelmonte.cocktailapp.fragment;
 
+import static org.koin.java.KoinJavaComponent.get;
 import static org.koin.java.KoinJavaComponent.inject;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +40,7 @@ import kotlin.Lazy;
 public class LoadDataFragment extends Fragment{
 
     private final Lazy<CloudManager> cloudManager = inject(CloudManager.class);
+    private ImageView gif;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,15 +65,19 @@ public class LoadDataFragment extends Fragment{
             public Object apply(Object[] objects) throws Throwable {
                 // Filling filters lists with api responses and saving in singleton
                 List<String> categories = ((CocktailList) objects[0]).getCocktails().stream().map(e -> e.getCategory()).collect(Collectors.toList());
+                categories.add(0,"");
                 cloudManager.getValue().setCategories(categories);
 
                 List<String> alcoholics = ((CocktailList) objects[1]).getCocktails().stream().map(e -> e.getAlcoholic()).collect(Collectors.toList());
+                alcoholics.add(0,"");
                 cloudManager.getValue().setAlcoholic(alcoholics);
 
                 List<String> ingredients = ((CocktailList) objects[2]).getCocktails().stream().map(e -> e.getIngredient()).collect(Collectors.toList());
+                ingredients.add(0,"");
                 cloudManager.getValue().setIngredients(ingredients);
 
                 List<String> glasses = ((CocktailList) objects[3]).getCocktails().stream().map(e -> e.getGlass()).collect(Collectors.toList());
+                glasses.add(0," ");
                 cloudManager.getValue().setGlasses(glasses);
 
                 return objects;
@@ -83,8 +95,20 @@ public class LoadDataFragment extends Fragment{
 
             @Override
             public void onError(@NonNull Throwable e) {
-                //todo alert dialog
-                Toast.makeText(getActivity(), "Oops qualcosa è andato storto...", Toast.LENGTH_LONG).show();
+                //Alert to retry or close the app
+                getActivity().runOnUiThread(() ->{
+                    new AlertDialog.Builder(getActivity()).setTitle(R.string.attention).setMessage(R.string.loading_error).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            loadData();
+                        }
+                    }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            getActivity().finish();
+                        }
+                    }).create().show();
+                });
             }
 
             @Override
@@ -99,7 +123,10 @@ public class LoadDataFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_load_data, container, false);
+        FrameLayout frameLayout = (FrameLayout) inflater.inflate(R.layout.fragment_load_data, container, false);
+        gif = frameLayout.findViewById(R.id.gif);
+        Glide.with(getActivity()).asGif().load(R.drawable.giphy).into(gif);
+        return frameLayout;
     }
 
     @Override

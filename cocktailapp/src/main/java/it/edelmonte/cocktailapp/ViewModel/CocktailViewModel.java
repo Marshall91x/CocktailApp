@@ -21,6 +21,7 @@ public class CocktailViewModel extends ViewModel {
     }
 
     public MutableLiveData<CocktailList> getCocktailsRepo(String filter, String value) {
+        //Calling repository
         cocktails = cocktailRepository.getCocktails(filter + "=" + value);
         return cocktails;
     }

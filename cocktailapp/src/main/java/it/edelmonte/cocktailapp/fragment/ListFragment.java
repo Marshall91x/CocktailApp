@@ -2,25 +2,33 @@ package it.edelmonte.cocktailapp.fragment;
 
 import static org.koin.java.KoinJavaComponent.inject;
 
+import android.app.SearchManager;
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.List;
 
 import it.edelmonte.cocktailapp.R;
 import it.edelmonte.cocktailapp.ViewModel.CocktailViewModel;
@@ -36,7 +44,10 @@ public class ListFragment extends Fragment {
 
     private Spinner filterSpinner, listSpinner;
     private RecyclerView cocktailRecycler;
+    private LinearLayout noData;
     private CocktailViewModel model;
+    private MenuItem menuItem;
+    private SearchView searchView;
     private CocktailAdapter adapter;
     private final Lazy<CloudManager> cloudManager = inject(CloudManager.class);
     private String callParameter;
@@ -46,19 +57,28 @@ public class ListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         model = new ViewModelProvider(this).get(CocktailViewModel.class);
         model.getCocktails(null, null).observe(this, cocktailList -> {
-            // Recycler flow
-            Log.d("My datat lenght: ", cocktailList != null ? String.valueOf(cocktailList.cocktails.size()) : String.valueOf(0));
+            // Updating ui after api call
             if (cocktailList != null) {
                 initRecycler(cocktailList);
+            } else {
+                noData(true);
             }
         });
     }
 
+    private void noData(boolean show) {
+        //Hide recycler if list is null and show filter message
+        cocktailRecycler.setVisibility(show ? View.GONE : View.VISIBLE);
+        noData.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
+
     private void initRecycler(CocktailList cocktailList) {
+        //Create adapter and set to recyclerview
         adapter = new CocktailAdapter(cocktailList.getCocktails(), getActivity());
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.VERTICAL, false);
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 2, LinearLayoutManager.VERTICAL, false);
         cocktailRecycler.setLayoutManager(layoutManager);
         cocktailRecycler.setAdapter(adapter);
+        noData(false);
     }
 
     @Override
@@ -66,6 +86,7 @@ public class ListFragment extends Fragment {
                              Bundle savedInstanceState) {
         FrameLayout frameLayout = (FrameLayout) inflater.inflate(R.layout.fragment_list, container, false);
         init(frameLayout);
+        setHasOptionsMenu(true);
         return frameLayout;
     }
 
@@ -75,6 +96,7 @@ public class ListFragment extends Fragment {
         listSpinner = frameLayout.findViewById(R.id.list_spinner);
         listSpinner.setEnabled(false);
         cocktailRecycler = frameLayout.findViewById(R.id.cocktail_recycler);
+        noData = frameLayout.findViewById(R.id.no_data);
         listener();
     }
 
@@ -118,12 +140,53 @@ public class ListFragment extends Fragment {
         listSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                model.getCocktails(callParameter, (String) adapterView.getSelectedItem());
+                if(i != 0){
+                    model.getCocktails(callParameter, (String) adapterView.getSelectedItem());
+                }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
+            }
+        });
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        MenuInflater menuInflater = getActivity().getMenuInflater();
+        menuInflater.inflate(R.menu.search_cocktail, menu);
+        SearchManager searchManager = (SearchManager)
+                getActivity().getSystemService(Context.SEARCH_SERVICE);
+        menuItem = menu.findItem(R.id.search_cocktail);
+        searchView = (SearchView) menuItem.getActionView();
+        searchView.setSearchableInfo(searchManager.
+                getSearchableInfo(getActivity().getComponentName()));
+        searchView.setQueryHint("Search...");
+        TextView textView = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            textView.setTextCursorDrawable(R.drawable.white_cursor);
+        } else {
+            Field f = null;
+            try {
+                f = TextView.class.getDeclaredField("mCursorDrawableRes");
+                f.setAccessible(true);
+                f.set(textView, R.drawable.white_cursor);
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        searchView.setSubmitButtonEnabled(false);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return true;
             }
         });
     }
