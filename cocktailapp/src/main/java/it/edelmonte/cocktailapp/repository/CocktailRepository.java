@@ -13,7 +13,7 @@ public class CocktailRepository {
 
     private static CocktailRepository cocktailRepository;
     private CocktailApiInterface apiService;
-    private MutableLiveData <CocktailList> cocktails;
+    private final MutableLiveData <CocktailList> cocktails = new MutableLiveData<>();
 
     public static CocktailRepository getInstance() {
         if(cocktailRepository == null){
@@ -26,4 +26,21 @@ public class CocktailRepository {
         apiService = CocktailApiClient.getClient().create(CocktailApiInterface.class);
     }
 
+    public MutableLiveData<CocktailList> getCocktails(String s) {
+        Call<CocktailList> call = apiService.getCocktails("filter.php?"+s);
+        call.enqueue(new Callback<CocktailList>() {
+            @Override
+            public void onResponse(Call<CocktailList> call, Response<CocktailList> response) {
+                if(response.isSuccessful()){
+                    cocktails.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CocktailList> call, Throwable t) {
+                cocktails.postValue(null);
+            }
+        });
+        return cocktails;
+    }
 }

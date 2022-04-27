@@ -14,6 +14,7 @@ import androidx.navigation.Navigation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observable;
@@ -55,10 +56,18 @@ public class LoadDataFragment extends Fragment{
             @Override
             public Object apply(Object[] objects) throws Throwable {
                 // Filling filters lists with api responses and saving in singleton
-                cloudManager.getValue().setCategories(((CocktailList) objects[0]).getCocktails());
-                cloudManager.getValue().setAlcoholic(((CocktailList) objects[1]).getCocktails());
-                cloudManager.getValue().setIngredients(((CocktailList) objects[2]).getCocktails());
-                cloudManager.getValue().setGlasses(((CocktailList) objects[3]).getCocktails());
+                List<String> categories = ((CocktailList) objects[0]).getCocktails().stream().map(e -> e.getCategory()).collect(Collectors.toList());
+                cloudManager.getValue().setCategories(categories);
+
+                List<String> alcoholics = ((CocktailList) objects[1]).getCocktails().stream().map(e -> e.getAlcoholic()).collect(Collectors.toList());
+                cloudManager.getValue().setAlcoholic(alcoholics);
+
+                List<String> ingredients = ((CocktailList) objects[2]).getCocktails().stream().map(e -> e.getIngredient()).collect(Collectors.toList());
+                cloudManager.getValue().setIngredients(ingredients);
+
+                List<String> glasses = ((CocktailList) objects[3]).getCocktails().stream().map(e -> e.getGlass()).collect(Collectors.toList());
+                cloudManager.getValue().setGlasses(glasses);
+
                 return objects;
             }
         }).subscribeOn(Schedulers.io()).subscribe(new Observer<Object>() {
@@ -74,6 +83,7 @@ public class LoadDataFragment extends Fragment{
 
             @Override
             public void onError(@NonNull Throwable e) {
+                //todo alert dialog
                 Toast.makeText(getActivity(), "Oops qualcosa è andato storto...", Toast.LENGTH_LONG).show();
             }
 
