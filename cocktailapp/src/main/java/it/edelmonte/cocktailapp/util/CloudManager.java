@@ -10,6 +10,7 @@ public class CloudManager {
     private List<String> ingredients;
     private List<String> glasses;
     private List<String> alcoholic;
+    private Cocktail cocktail;
 
     public List<String> getCategories() {
         return categories;
@@ -41,5 +42,13 @@ public class CloudManager {
 
     public void setAlcoholic(List<String> alcoholic) {
         this.alcoholic = alcoholic;
+    }
+
+    public Cocktail getCocktail() {
+        return cocktail;
+    }
+
+    public void setCocktail(Cocktail cocktail) {
+        this.cocktail = cocktail;
     }
 }

@@ -22,14 +22,5 @@
         android:id="@+id/listFragment"
         android:name="it.edelmonte.cocktailapp.fragment.ListFragment"
         android:label="fragment_list"
-        tools:layout="@layout/fragment_list" >
-        <action
-            android:id="@+id/list_to_detail"
-            app:destination="@id/detailFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/detailFragment"
-        android:name="it.edelmonte.cocktailapp.fragment.DetailFragment"
-        android:label="fragment_detail"
-        tools:layout="@layout/fragment_detail" />
+        tools:layout="@layout/fragment_list" />
 </navigation>

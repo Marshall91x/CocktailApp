@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -64,19 +63,19 @@ public class LoadDataFragment extends Fragment{
             @Override
             public Object apply(Object[] objects) throws Throwable {
                 // Filling filters lists with api responses and saving in singleton
-                List<String> categories = ((CocktailList) objects[0]).getCocktails().stream().map(e -> e.getCategory()).collect(Collectors.toList());
+                List<String> categories = ((CocktailList) objects[0]).cocktails.stream().map(e -> e.category).collect(Collectors.toList());
                 categories.add(0,"");
                 cloudManager.getValue().setCategories(categories);
 
-                List<String> alcoholics = ((CocktailList) objects[1]).getCocktails().stream().map(e -> e.getAlcoholic()).collect(Collectors.toList());
+                List<String> alcoholics = ((CocktailList) objects[1]).cocktails.stream().map(e -> e.alcoholic).collect(Collectors.toList());
                 alcoholics.add(0,"");
                 cloudManager.getValue().setAlcoholic(alcoholics);
 
-                List<String> ingredients = ((CocktailList) objects[2]).getCocktails().stream().map(e -> e.getIngredient()).collect(Collectors.toList());
+                List<String> ingredients = ((CocktailList) objects[2]).cocktails.stream().map(e -> e.ingredient1).collect(Collectors.toList());
                 ingredients.add(0,"");
                 cloudManager.getValue().setIngredients(ingredients);
 
-                List<String> glasses = ((CocktailList) objects[3]).getCocktails().stream().map(e -> e.getGlass()).collect(Collectors.toList());
+                List<String> glasses = ((CocktailList) objects[3]).cocktails.stream().map(e -> e.glass).collect(Collectors.toList());
                 glasses.add(0," ");
                 cloudManager.getValue().setGlasses(glasses);
 

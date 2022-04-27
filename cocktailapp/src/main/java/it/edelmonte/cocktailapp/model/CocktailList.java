@@ -9,11 +9,4 @@ public class CocktailList {
     @SerializedName("drinks")
     public List<Cocktail> cocktails;
 
-    public List<Cocktail> getCocktails() {
-        return cocktails;
-    }
-
-    public void setCocktails(List<Cocktail> cocktails) {
-        this.cocktails = cocktails;
-    }
 }

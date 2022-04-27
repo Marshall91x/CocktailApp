@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
@@ -55,9 +56,17 @@ public class ListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActivity().getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                //todo closing dialog
+                getActivity().finish();
+            }
+        });
         model = new ViewModelProvider(this).get(CocktailViewModel.class);
         model.getCocktails(null, null).observe(this, cocktailList -> {
             // Updating ui after api call
+            //todo insert progress during call
             if (cocktailList != null) {
                 initRecycler(cocktailList);
             } else {
@@ -74,7 +83,7 @@ public class ListFragment extends Fragment {
 
     private void initRecycler(CocktailList cocktailList) {
         //Create adapter and set to recyclerview
-        adapter = new CocktailAdapter(cocktailList.getCocktails(), getActivity());
+        adapter = new CocktailAdapter(cocktailList.cocktails, getActivity(), this);
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 2, LinearLayoutManager.VERTICAL, false);
         cocktailRecycler.setLayoutManager(layoutManager);
         cocktailRecycler.setAdapter(adapter);

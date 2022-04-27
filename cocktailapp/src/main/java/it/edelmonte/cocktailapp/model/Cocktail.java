@@ -10,19 +10,19 @@ public class Cocktail {
     @SerializedName("strDrink")
     public String name;
 
-    @SerializedName("strInstruction")
+    @SerializedName("strInstructions")
     public String instructionEn;
 
-    @SerializedName("strInstructionES")
+    @SerializedName("strInstructionsES")
     public String instructionEs;
 
-    @SerializedName("strInstructionDE")
+    @SerializedName("strInstructionsDE")
     public String instructionDe;
 
-    @SerializedName("strInstructionFR")
+    @SerializedName("strInstructionsFR")
     public String instructionFr;
 
-    @SerializedName("strInstructionIT")
+    @SerializedName("strInstructionsIT")
     public String instructionIt;
 
     @SerializedName("strDrinkThumb")
@@ -32,7 +32,49 @@ public class Cocktail {
     public String category;
 
     @SerializedName("strIngredient1")
-    public String ingredient;
+    public String ingredient1;
+
+    @SerializedName("strIngredient2")
+    public String ingredient2;
+
+    @SerializedName("strIngredient3")
+    public String ingredient3;
+
+    @SerializedName("strIngredient4")
+    public String ingredient4;
+
+    @SerializedName("strIngredient5")
+    public String ingredient5;
+
+    @SerializedName("strIngredient6")
+    public String ingredient6;
+
+    @SerializedName("strIngredient7")
+    public String ingredient7;
+
+    @SerializedName("strIngredient8")
+    public String ingredient8;
+
+    @SerializedName("strIngredient9")
+    public String ingredient9;
+
+    @SerializedName("strIngredient10")
+    public String ingredient10;
+
+    @SerializedName("strIngredient11")
+    public String ingredient11;
+
+    @SerializedName("strIngredient12")
+    public String ingredient12;
+
+    @SerializedName("strIngredient13")
+    public String ingredient13;
+
+    @SerializedName("strIngredient14")
+    public String ingredient14;
+
+    @SerializedName("strIngredient15")
+    public String ingredient15;
 
     @SerializedName("strAlcoholic")
     public String alcoholic;
@@ -40,99 +82,7 @@ public class Cocktail {
     @SerializedName("strGlass")
     public String glass;
 
-    public String getCategory() {
-        return category;
-    }
+    @SerializedName("strVideo")
+    public String video;
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public String getIngredient() {
-        return ingredient;
-    }
-
-    public void setIngredient(String ingredient) {
-        this.ingredient = ingredient;
-    }
-
-    public String getAlcoholic() {
-        return alcoholic;
-    }
-
-    public void setAlcoholic(String alcoholic) {
-        this.alcoholic = alcoholic;
-    }
-
-    public String getGlass() {
-        return glass;
-    }
-
-    public void setGlass(String glass) {
-        this.glass = glass;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getInstructionEn() {
-        return instructionEn;
-    }
-
-    public void setInstructionEn(String instructionEn) {
-        this.instructionEn = instructionEn;
-    }
-
-    public String getInstructionEs() {
-        return instructionEs;
-    }
-
-    public void setInstructionEs(String instructionEs) {
-        this.instructionEs = instructionEs;
-    }
-
-    public String getInstructionDe() {
-        return instructionDe;
-    }
-
-    public void setInstructionDe(String instructionDe) {
-        this.instructionDe = instructionDe;
-    }
-
-    public String getInstructionFr() {
-        return instructionFr;
-    }
-
-    public void setInstructionFr(String instructionFr) {
-        this.instructionFr = instructionFr;
-    }
-
-    public String getInstructionIt() {
-        return instructionIt;
-    }
-
-    public void setInstructionIt(String instructionIt) {
-        this.instructionIt = instructionIt;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
 }

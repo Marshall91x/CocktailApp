@@ -22,4 +22,7 @@ public interface CocktailApiInterface {
 
     @GET
     Call<CocktailList> getCocktails(@Url String endpoint);
+
+    @GET
+    Observable<CocktailList> getCocktailById(@Url String endpoint);
 }
