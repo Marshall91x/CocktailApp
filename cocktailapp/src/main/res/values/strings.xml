@@ -2,6 +2,6 @@
     <string name="app_name">CocktailDB</string>
     <string name="loading_error">There was an unexpected error would you retry?</string>
     <string name="attention">Attention</string>
-    <string name="instructions">Select category in filters above to get a cocktail List. Then touch one cocktail to see its recipe and details.</string>
+    <string name="instructions">Select category in filters above to get cocktail List. Then touch one cocktail to see its recipe and details.</string>
     <string name="search">Cocktail Search</string>
 </resources>

@@ -1,6 +1,7 @@
 package it.edelmonte.cocktailapp.adapter;
 
 import android.app.Activity;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -62,8 +64,16 @@ public class CocktailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if (holder instanceof CocktailAdapter.ViewHolderList) {
             // Set views values
             CocktailAdapter.ViewHolderList holderCasted = (ViewHolderList) holder;
-            holderCasted.cocktailName.setText(filteredDataset.get(position).getName());
-            Glide.with(activity).load(filteredDataset.get(position).getImage()).into(holderCasted.cocktailImage);
+            holderCasted.cocktailName.setText(filteredDataset.get(holder.getAdapterPosition()).getName());
+            Glide.with(activity).load(filteredDataset.get(holder.getAdapterPosition()).getImage()).into(holderCasted.cocktailImage);
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("id", filteredDataset.get(holder.getAdapterPosition()).getId());
+                    Navigation.findNavController(view).navigate(R.id.list_to_detail, bundle);
+                }
+            });
         }
     }
 

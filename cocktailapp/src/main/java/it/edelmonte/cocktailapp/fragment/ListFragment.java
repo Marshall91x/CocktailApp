@@ -154,6 +154,7 @@ public class ListFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        //Add search bar to top bar for filtered search
         MenuInflater menuInflater = getActivity().getMenuInflater();
         menuInflater.inflate(R.menu.search_cocktail, menu);
         SearchManager searchManager = (SearchManager)
