@@ -1,6 +1,5 @@
 package it.edelmonte.cocktailapp.fragment;
 
-import static org.koin.java.KoinJavaComponent.get;
 import static org.koin.java.KoinJavaComponent.inject;
 
 import android.app.AlertDialog;
@@ -64,19 +63,19 @@ public class LoadDataFragment extends Fragment{
             public Object apply(Object[] objects) throws Throwable {
                 // Filling filters lists with api responses and saving in singleton
                 List<String> categories = ((CocktailList) objects[0]).cocktails.stream().map(e -> e.category).collect(Collectors.toList());
-                categories.add(0,"");
+                categories.add(0,"Choose category");
                 cloudManager.getValue().setCategories(categories);
 
                 List<String> alcoholics = ((CocktailList) objects[1]).cocktails.stream().map(e -> e.alcoholic).collect(Collectors.toList());
-                alcoholics.add(0,"");
+                alcoholics.add(0,"Choose alcholic");
                 cloudManager.getValue().setAlcoholic(alcoholics);
 
                 List<String> ingredients = ((CocktailList) objects[2]).cocktails.stream().map(e -> e.ingredient1).collect(Collectors.toList());
-                ingredients.add(0,"");
+                ingredients.add(0,"Choose ingredient");
                 cloudManager.getValue().setIngredients(ingredients);
 
                 List<String> glasses = ((CocktailList) objects[3]).cocktails.stream().map(e -> e.glass).collect(Collectors.toList());
-                glasses.add(0," ");
+                glasses.add(0,"Choose glass");
                 cloudManager.getValue().setGlasses(glasses);
 
                 return objects;

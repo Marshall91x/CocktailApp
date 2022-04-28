@@ -2,8 +2,10 @@ package it.edelmonte.cocktailapp.fragment;
 
 import static org.koin.java.KoinJavaComponent.inject;
 
+import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -49,6 +52,7 @@ public class ListFragment extends Fragment {
     private CocktailViewModel model;
     private MenuItem menuItem;
     private SearchView searchView;
+    private ProgressBar progressBar;
     private CocktailAdapter adapter;
     private final Lazy<CloudManager> cloudManager = inject(CloudManager.class);
     private String callParameter;
@@ -59,14 +63,24 @@ public class ListFragment extends Fragment {
         getActivity().getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                //todo closing dialog
-                getActivity().finish();
+                new AlertDialog.Builder(getActivity()).setTitle(R.string.attention).setMessage(R.string.app_close).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        getActivity().finish();
+                    }
+                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                }).create().show();
             }
         });
         model = new ViewModelProvider(this).get(CocktailViewModel.class);
         model.getCocktails(null, null).observe(this, cocktailList -> {
             // Updating ui after api call
-            //todo insert progress during call
+            progressBar.setVisibility(View.GONE);
+            cocktailRecycler.setVisibility(View.VISIBLE);
             if (cocktailList != null) {
                 initRecycler(cocktailList);
             } else {
@@ -105,6 +119,7 @@ public class ListFragment extends Fragment {
         listSpinner = frameLayout.findViewById(R.id.list_spinner);
         listSpinner.setEnabled(false);
         cocktailRecycler = frameLayout.findViewById(R.id.cocktail_recycler);
+        progressBar = frameLayout.findViewById(R.id.progress);
         noData = frameLayout.findViewById(R.id.no_data);
         listener();
     }
@@ -150,6 +165,8 @@ public class ListFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if(i != 0){
+                    cocktailRecycler.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.VISIBLE);
                     model.getCocktails(callParameter, (String) adapterView.getSelectedItem());
                 }
             }

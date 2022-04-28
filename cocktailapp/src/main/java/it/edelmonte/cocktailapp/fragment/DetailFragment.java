@@ -13,8 +13,8 @@ import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -28,6 +28,7 @@ import it.edelmonte.cocktailapp.R;
 import it.edelmonte.cocktailapp.model.Cocktail;
 import it.edelmonte.cocktailapp.util.CloudManager;
 import it.edelmonte.cocktailapp.util.Constants;
+import it.edelmonte.cocktailapp.util.ExpandableHeightGridView;
 import it.edelmonte.cocktailapp.util.Utility;
 import kotlin.Lazy;
 
@@ -37,7 +38,8 @@ public class DetailFragment extends DialogFragment {
     private ImageView cocktailImage;
     private TextView name, recipe, video;
     private Cocktail cocktail;
-    private GridView ingredients;
+    private ExpandableHeightGridView ingredients;
+    private LinearLayout videoLayout;
     private Spinner langSpinner;
     private final Lazy<CloudManager> cloudManager = inject(CloudManager.class);
 
@@ -67,6 +69,7 @@ public class DetailFragment extends DialogFragment {
         ingredients = view.findViewById(R.id.ingredients);
         langSpinner = view.findViewById(R.id.lang_spinner);
         video = view.findViewById(R.id.video);
+        videoLayout = view.findViewById(R.id.video_layout);
         cocktail = cloudManager.getValue().getCocktail();
         bindData();
     }
@@ -76,8 +79,10 @@ public class DetailFragment extends DialogFragment {
         name.setText(cocktail.name);
         recipe.setText(cocktail.instructionEn);
         ingredients.setNumColumns(2);
+        ingredients.setExpanded(true);
         ingredients.setAdapter(Utility.createIngredientList(cocktail, getActivity()));
         if (cocktail.video != null) {
+            videoLayout.setVisibility(View.VISIBLE);
             video.setMovementMethod(LinkMovementMethod.getInstance());
             video.setText(cocktail.video);
             video.setOnClickListener(new View.OnClickListener() {

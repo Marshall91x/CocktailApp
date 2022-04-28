@@ -16,7 +16,7 @@ public class Utility {
 
     public static SpinnerAdapter createFilterAdapter(FragmentActivity activity) {
         List<String> filters = new ArrayList<>();
-        filters.add(" ");
+        filters.add("Choose filter");
         filters.add("Categories");
         filters.add("Ingredients");
         filters.add("Alcoholic");
