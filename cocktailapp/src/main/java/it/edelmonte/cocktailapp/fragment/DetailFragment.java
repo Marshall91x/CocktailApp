@@ -4,8 +4,12 @@ import static org.koin.java.KoinJavaComponent.inject;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,7 +17,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,11 +35,10 @@ import kotlin.Lazy;
 public class DetailFragment extends DialogFragment {
 
     private ImageView cocktailImage;
-    private TextView name, recipe;
+    private TextView name, recipe, video;
     private Cocktail cocktail;
     private GridView ingredients;
     private Spinner langSpinner;
-    private VideoView videoView;
     private final Lazy<CloudManager> cloudManager = inject(CloudManager.class);
 
     public DetailFragment() {
@@ -64,7 +66,7 @@ public class DetailFragment extends DialogFragment {
         recipe = view.findViewById(R.id.recipe);
         ingredients = view.findViewById(R.id.ingredients);
         langSpinner = view.findViewById(R.id.lang_spinner);
-        videoView = view.findViewById(R.id.videoView);
+        video = view.findViewById(R.id.video);
         cocktail = cloudManager.getValue().getCocktail();
         bindData();
     }
@@ -75,17 +77,28 @@ public class DetailFragment extends DialogFragment {
         recipe.setText(cocktail.instructionEn);
         ingredients.setNumColumns(2);
         ingredients.setAdapter(Utility.createIngredientList(cocktail, getActivity()));
-        if(cocktail.video != null){
-            videoView.setVisibility(View.VISIBLE);
-            videoView.setVideoPath(cocktail.video);
-            videoView.start();
+        if (cocktail.video != null) {
+            video.setMovementMethod(LinkMovementMethod.getInstance());
+            video.setText(cocktail.video);
+            video.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vdn.youtube:" + Utility.getVideoId(cocktail.video)));
+                    Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(cocktail.video));
+                    try {
+                        startActivity(appIntent);
+                    } catch (ActivityNotFoundException ex){
+                        startActivity(webIntent);
+                    }
+                }
+            });
         }
         langSpinner.setAdapter(Utility.createLanguagesAdapter(getActivity(), cocktail));
         langSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String filter = (String) adapterView.getSelectedItem();
-                switch (filter){
+                switch (filter) {
                     case Constants.EN:
                         recipe.setText(cocktail.instructionEn);
                         break;

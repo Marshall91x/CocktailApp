@@ -53,4 +53,9 @@ public class Utility {
         if (cocktail.instructionEs != null) languages.add("ES");
         return new ArrayAdapter<>(activity, android.R.layout.simple_spinner_item, languages);
     }
+
+    public static String getVideoId(String video) {
+        String search = "=";
+        return video.substring(video.indexOf(search) + 1);
+    }
 }
