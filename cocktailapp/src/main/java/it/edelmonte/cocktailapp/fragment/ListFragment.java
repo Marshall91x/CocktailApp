@@ -80,8 +80,8 @@ public class ListFragment extends Fragment {
         model.getCocktails(null, null).observe(this, cocktailList -> {
             // Updating ui after api call
             progressBar.setVisibility(View.GONE);
-            cocktailRecycler.setVisibility(View.VISIBLE);
             if (cocktailList != null) {
+                cocktailRecycler.setVisibility(View.VISIBLE);
                 initRecycler(cocktailList);
             } else {
                 noData(true);
@@ -212,7 +212,9 @@ public class ListFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                adapter.getFilter().filter(newText);
+                if(adapter != null){
+                    adapter.getFilter().filter(newText);
+                }
                 return true;
             }
         });

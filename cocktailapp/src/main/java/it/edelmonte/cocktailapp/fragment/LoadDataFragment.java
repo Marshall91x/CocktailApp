@@ -18,6 +18,7 @@ import androidx.navigation.Navigation;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,18 +64,22 @@ public class LoadDataFragment extends Fragment{
             public Object apply(Object[] objects) throws Throwable {
                 // Filling filters lists with api responses and saving in singleton
                 List<String> categories = ((CocktailList) objects[0]).cocktails.stream().map(e -> e.category).collect(Collectors.toList());
+                Collections.sort(categories);
                 categories.add(0,"Choose category");
                 cloudManager.getValue().setCategories(categories);
 
                 List<String> alcoholics = ((CocktailList) objects[1]).cocktails.stream().map(e -> e.alcoholic).collect(Collectors.toList());
+                Collections.sort(alcoholics);
                 alcoholics.add(0,"Choose alcholic");
                 cloudManager.getValue().setAlcoholic(alcoholics);
 
                 List<String> ingredients = ((CocktailList) objects[2]).cocktails.stream().map(e -> e.ingredient1).collect(Collectors.toList());
+                Collections.sort(ingredients);
                 ingredients.add(0,"Choose ingredient");
                 cloudManager.getValue().setIngredients(ingredients);
 
                 List<String> glasses = ((CocktailList) objects[3]).cocktails.stream().map(e -> e.glass).collect(Collectors.toList());
+                Collections.sort(glasses);
                 glasses.add(0,"Choose glass");
                 cloudManager.getValue().setGlasses(glasses);
 
