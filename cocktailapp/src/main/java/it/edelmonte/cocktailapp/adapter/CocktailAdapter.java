@@ -41,12 +41,11 @@ import kotlin.Lazy;
 
 public class CocktailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
 
-    private List<Cocktail> mDataset;
+    private final List<Cocktail> mDataset;
     private List<Cocktail> filteredDataset;
-    private Activity activity;
-    private Fragment fragment;
+    private final Activity activity;
+    private final Fragment fragment;
     private CocktailFilter cocktailFilter;
-    private CocktailApiInterface apiService;
     private final Lazy<CloudManager> cloudManager = inject(CloudManager.class);
 
     public CocktailAdapter(List<Cocktail> mDataset, Activity activity, Fragment fragment) {
@@ -87,17 +86,12 @@ public class CocktailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             CocktailAdapter.ViewHolderList holderCasted = (ViewHolderList) holder;
             holderCasted.cocktailName.setText(filteredDataset.get(holder.getAdapterPosition()).name);
             Glide.with(activity).load(filteredDataset.get(holder.getAdapterPosition()).image).into(holderCasted.cocktailImage);
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    loadData(filteredDataset.get(holder.getAdapterPosition()).id);
-                }
-            });
+            holder.itemView.setOnClickListener(view -> loadData(filteredDataset.get(holder.getAdapterPosition()).id));
         }
     }
 
     private void loadData(String id) {
-        apiService = CocktailApiClient.getClient().create(CocktailApiInterface.class);
+        CocktailApiInterface apiService = CocktailApiClient.getClient().create(CocktailApiInterface.class);
         Observable<CocktailList> observable = apiService.getCocktailById("lookup.php?i=" + id);
         observable.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<CocktailList>() {
             @Override
@@ -118,12 +112,7 @@ public class CocktailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         public void onClick(DialogInterface dialogInterface, int i) {
                             loadData(id);
                         }
-                    }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
-                        }
-                    }).create().show();
+                    }).setNegativeButton("No", (dialogInterface, i) -> dialogInterface.dismiss()).create().show();
                 });
             }
 

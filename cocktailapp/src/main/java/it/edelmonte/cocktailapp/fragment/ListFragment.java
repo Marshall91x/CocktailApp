@@ -46,12 +46,11 @@ import kotlin.Lazy;
 
 public class ListFragment extends Fragment {
 
-    private Spinner filterSpinner, listSpinner;
+    private Spinner filterSpinner;
+    private Spinner listSpinner;
     private RecyclerView cocktailRecycler;
     private LinearLayout noData;
     private CocktailViewModel model;
-    private MenuItem menuItem;
-    private SearchView searchView;
     private ProgressBar progressBar;
     private CocktailAdapter adapter;
     private final Lazy<CloudManager> cloudManager = inject(CloudManager.class);
@@ -185,8 +184,8 @@ public class ListFragment extends Fragment {
         menuInflater.inflate(R.menu.search_cocktail, menu);
         SearchManager searchManager = (SearchManager)
                 getActivity().getSystemService(Context.SEARCH_SERVICE);
-        menuItem = menu.findItem(R.id.search_cocktail);
-        searchView = (SearchView) menuItem.getActionView();
+        MenuItem menuItem = menu.findItem(R.id.search_cocktail);
+        SearchView searchView = (SearchView) menuItem.getActionView();
         searchView.setSearchableInfo(searchManager.
                 getSearchableInfo(getActivity().getComponentName()));
         searchView.setQueryHint("Search...");

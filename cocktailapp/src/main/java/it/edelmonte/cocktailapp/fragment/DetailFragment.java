@@ -36,7 +36,9 @@ import kotlin.Lazy;
 public class DetailFragment extends DialogFragment {
 
     private ImageView cocktailImage;
-    private TextView name, recipe, video;
+    private TextView name;
+    private TextView recipe;
+    private TextView video;
     private Cocktail cocktail;
     private ExpandableHeightGridView ingredients;
     private LinearLayout videoLayout;
@@ -53,12 +55,7 @@ public class DetailFragment extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_detail, null);
         init(view);
-        builder.setView(view).setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
+        builder.setView(view).setPositiveButton(R.string.close, (dialog, which) -> dialog.dismiss());
         return builder.create();
     }
 
@@ -85,16 +82,13 @@ public class DetailFragment extends DialogFragment {
             videoLayout.setVisibility(View.VISIBLE);
             video.setMovementMethod(LinkMovementMethod.getInstance());
             video.setText(cocktail.video);
-            video.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vdn.youtube:" + Utility.getVideoId(cocktail.video)));
-                    Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(cocktail.video));
-                    try {
-                        startActivity(appIntent);
-                    } catch (ActivityNotFoundException ex){
-                        startActivity(webIntent);
-                    }
+            video.setOnClickListener(view -> {
+                Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vdn.youtube:" + Utility.getVideoId(cocktail.video)));
+                Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(cocktail.video));
+                try {
+                    startActivity(appIntent);
+                } catch (ActivityNotFoundException ex){
+                    startActivity(webIntent);
                 }
             });
         }
@@ -126,7 +120,6 @@ public class DetailFragment extends DialogFragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
             }
         });
     }

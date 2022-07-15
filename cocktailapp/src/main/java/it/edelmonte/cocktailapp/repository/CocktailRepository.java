@@ -1,5 +1,6 @@
 package it.edelmonte.cocktailapp.repository;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import it.edelmonte.cocktailapp.api.CocktailApiClient;
@@ -29,16 +30,16 @@ public class CocktailRepository {
     public MutableLiveData<CocktailList> getCocktails(String s) {
         //Calling api with "dynamic" endpoint creation to use only one api method
         Call<CocktailList> call = apiService.getCocktails("filter.php?"+s);
-        call.enqueue(new Callback<CocktailList>() {
+        call.enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<CocktailList> call, Response<CocktailList> response) {
-                if(response.isSuccessful()){
+            public void onResponse(@NonNull Call<CocktailList> call, @NonNull Response<CocktailList> response) {
+                if (response.isSuccessful()) {
                     cocktails.setValue(response.body());
                 }
             }
 
             @Override
-            public void onFailure(Call<CocktailList> call, Throwable t) {
+            public void onFailure(@NonNull Call<CocktailList> call, @NonNull Throwable t) {
                 cocktails.postValue(null);
             }
         });
